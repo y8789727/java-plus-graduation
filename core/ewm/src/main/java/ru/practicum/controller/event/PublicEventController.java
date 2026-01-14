@@ -39,7 +39,7 @@ public class PublicEventController {
     private final StatsClient statsClient;
     private final CommentService commentService;
 
-    @Value("${stats.service.name}")
+    @Value("${spring.application.name}")
     private String serviceName;
 
     @GetMapping

@@ -254,8 +254,8 @@ public class EventServiceImpl implements EventService {
 
         return stats.stream()
                 .collect(Collectors.toMap(
-                        stat -> extractEventIdFromUri(stat.uri()),
-                        ResponseStatsDto::hits,
+                        stat -> extractEventIdFromUri(stat.getUri()),
+                        ResponseStatsDto::getHits,
                         (existing, replacement) -> existing
                 ));
     }
@@ -274,7 +274,7 @@ public class EventServiceImpl implements EventService {
         try {
             views = statsClient.get(createRequestStatsDto(uris, true))
                     .getFirst()
-                    .hits();
+                    .getHits();
         } catch (Exception e) {
             return views;
         }
@@ -302,12 +302,12 @@ public class EventServiceImpl implements EventService {
     }
 
     private RequestStatsDto createRequestStatsDto(List<String> uris, boolean unique) {
-        return new RequestStatsDto(
-                START_DATE_FOR_STAT_REQUEST,
-                LocalDateTime.now(),
-                uris,
-                unique
-        );
+        return RequestStatsDto.builder()
+                .start(START_DATE_FOR_STAT_REQUEST)
+                .end(LocalDateTime.now())
+                .uris(uris)
+                .unique(unique)
+                .build();
     }
 
     private void setViewsAndConfirmedRequests(Event event) {

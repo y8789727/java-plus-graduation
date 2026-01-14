@@ -25,17 +25,17 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<ResponseStatsDto> getStats(RequestStatsDto request) {
         List<String> requestUris;
-        if (request.uris() == null || request.uris().isEmpty()) {
+        if (request.getUris() == null || request.getUris().isEmpty()) {
             requestUris = null;
         } else {
-            requestUris = request.uris();
+            requestUris = request.getUris();
         }
 
         List<ResponseStatsDto> response;
-        if (request.unique()) {
-            response = statsRepository.findUniqueStats(request.start(), request.end(), requestUris);
+        if (request.getUnique()) {
+            response = statsRepository.findUniqueStats(request.getStart(), request.getEnd(), requestUris);
         } else {
-            response = statsRepository.findStats(request.start(), request.end(), requestUris);
+            response = statsRepository.findStats(request.getStart(), request.getEnd(), requestUris);
         }
 
         return response;

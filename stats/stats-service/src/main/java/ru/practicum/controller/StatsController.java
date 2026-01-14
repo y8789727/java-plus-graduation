@@ -1,6 +1,5 @@
 package ru.practicum.controller;
 
-import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +26,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveHit(
-            @RequestBody @Valid HitCreateDto createDto
-    ) {
+    public void saveHit(@RequestBody HitCreateDto createDto) {
         log.info("Запрос на сохранение информации о запросе к эндпоинту с данными: {}", createDto);
         statsService.saveHit(createDto);
     }
@@ -51,11 +48,20 @@ public class StatsController {
             @RequestParam(name = "unique", defaultValue = "false")
             Boolean unique
     ) {
-        log.info("Запрос на получение статистики по посещениям с данными: start = {}, end = {}, uris = {}, unique = {}",
-                start, end, uris, unique);
+        log.info("Запрос на получение статистики по посещениям с данными: start = {}, end = {}, uris = {}, unique = {}", start, end, uris, unique);
         if (start != null && end != null && !end.isAfter(start)) {
             throw new ValidationException("Дата конца диапазона должна быть позже даты начала");
         }
         return statsService.getStats(new RequestStatsDto(start, end, uris, unique));
+    }
+
+    @GetMapping("/statsf")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ResponseStatsDto> getStatsFeign(@RequestBody RequestStatsDto request) {
+        log.info("Запрос на получение статистики по посещениям с данными: request = {}", request);
+        if (request.getStart() != null && request.getEnd() != null && !request.getEnd().isAfter(request.getStart())) {
+            throw new ValidationException("Дата конца диапазона должна быть позже даты начала");
+        }
+        return statsService.getStats(request);
     }
 }

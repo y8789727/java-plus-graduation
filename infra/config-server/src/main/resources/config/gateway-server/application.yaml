@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    gateway:
+      discovery.locator.enabled: true
+      routes:
+        - id: stats_route
+          uri: lb://stats-server
+          predicates:
+            - Path=/hit/**,/statsf/**,/stats/**
+        - id: ewm_route
+          uri: lb://main-server
+          predicates:
+            - Path=/**
+
+server:
+  port: 8080
