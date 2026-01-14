@@ -9,10 +9,10 @@ spring:
         jdbc.time_zone: UTC
         format_sql: true
     show-sql: true
-  database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   sql.init.mode: always
   datasource:
-    url: jdbc:postgresql://localhost:5432/statsdb
+    url: jdbc:postgresql://localhost:5433/stats
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 12345
