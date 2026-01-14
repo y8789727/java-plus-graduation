@@ -11,6 +11,6 @@ spring:
           predicates:
             - Path=/hit/**,/statsf/**,/stats/**
         - id: ewm_route
-          uri: lb://main-server
+          uri: lb://main-service
           predicates:
             - Path=/**
