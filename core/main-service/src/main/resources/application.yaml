@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: main-server
+  sql.init.mode: always
   config:
     import: "configserver:"
   cloud:
