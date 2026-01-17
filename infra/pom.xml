@@ -9,10 +9,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>infra</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>main-service</module>
+        <module>discovery-server</module>
+        <module>config-server</module>
+        <module>gateway-server</module>
     </modules>
 
     <properties>

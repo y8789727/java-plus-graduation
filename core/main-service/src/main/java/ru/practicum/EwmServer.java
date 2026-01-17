@@ -1,0 +1,18 @@
+package ru.practicum;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@Slf4j
+@ConfigurationPropertiesScan
+@EnableFeignClients
+public class EwmServer {
+    public static void main(String[] args) {
+        log.info("Method launched (SpringApplication.run(EwmServer.class, args))");
+        SpringApplication.run(EwmServer.class, args);
+    }
+}
