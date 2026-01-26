@@ -10,7 +10,19 @@ spring:
           uri: lb://stats-server
           predicates:
             - Path=/hit/**,/statsf/**,/stats/**
-        - id: ewm_route
-          uri: lb://main-service
+        - id: users_route
+          uri: lb://user-service
+          predicates:
+            - Path=/admin/users/**
+        - id: comments_route
+          uri: lb://comment-service
+          predicates:
+            - Path=/admin/comments/**,/users/{userId}/comments/**,/events/comments/**,/events/{eventId}/comments/**
+        - id: request_route
+          uri: lb://request-service
+          predicates:
+            - Path=/admin/requests/**,/users/{userId}/requests/**
+        - id: event_route
+          uri: lb://event-service
           predicates:
             - Path=/**

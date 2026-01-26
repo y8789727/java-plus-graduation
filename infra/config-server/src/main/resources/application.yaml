@@ -14,5 +14,14 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, info
+  endpoint:
+    health:
+      show-details: always
+
 server:
   port: 0
