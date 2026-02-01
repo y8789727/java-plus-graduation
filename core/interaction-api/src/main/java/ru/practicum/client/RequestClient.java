@@ -15,6 +15,7 @@ import ru.practicum.dto.request.RequestStatusUpdateParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @FeignClient(name = "request-service", dismiss404 = true, fallback = RequestClientFallback.class)
 public interface RequestClient {
@@ -32,4 +33,6 @@ public interface RequestClient {
     @Headers(value = "Content-Type: application/json")
     @ResponseBody Map<Long, Long> getConfirmedRequestsByEvents(@RequestBody List<Long> eventIds);
 
+    @GetMapping("/admin/requests/{eventId}/{userId}")
+    Optional<ParticipationRequestDto> getRequestByEventAndUser(@PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId);
 }

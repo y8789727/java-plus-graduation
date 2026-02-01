@@ -11,6 +11,7 @@ import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.event.UpdateEventUserRequestParam;
 import ru.practicum.dto.request.ParticipationRequestDto;
+import ru.practicum.ewm.stats.proto.ActionTypeProto;
 
 import java.util.List;
 
@@ -36,4 +37,10 @@ public interface EventService {
     EventRequestStatusUpdateResult updateRequestStatus(EventRequestStatusUpdateRequestParam requestParam);
 
     EventFullDto findEventById(Long eventId);
+
+    List<EventShortDto> getEventsRecommendations(Long userId);
+
+    void likeEvent(Long eventId, Long userId);
+
+    void sendUserAction(Long userId, Long eventId, ActionTypeProto actionType);
 }

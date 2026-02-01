@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.client.EventClient;
 import ru.practicum.client.UserClient;
@@ -12,6 +13,8 @@ import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.dto.request.RequestStatus;
 import ru.practicum.dto.request.RequestStatusUpdateParam;
 import ru.practicum.dto.user.UserDto;
+import ru.practicum.ewm.client.stats.CollectorClient;
+import ru.practicum.ewm.stats.proto.ActionTypeProto;
 import ru.practicum.exception.AllreadyExistsException;
 import ru.practicum.exception.ConditionsNotMetException;
 import ru.practicum.exception.NotFoundException;
@@ -23,14 +26,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final UserClient userClient;
     private final RequestRepository requestRepository;
     private final EventClient eventClient;
+    private final CollectorClient collectorClient;
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(long userId) {
@@ -47,6 +53,8 @@ public class RequestServiceImpl implements RequestService {
         final EventFullDto event = getEventById(eventId);
 
         validateCreation(user, event);
+
+        sendUserAction(userId, eventId, ActionTypeProto.ACTION_REGISTER);
 
         return RequestDtoMapper.mapRequestToDto(requestRepository.save(Request.builder()
                 .createdOn(LocalDateTime.now())
@@ -139,6 +147,11 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
+    @Override
+    public Optional<ParticipationRequestDto> getRequestByEventAndUser(long userId, long eventId) {
+        return requestRepository.findByUserIdAndEvent(userId, eventId).map(RequestDtoMapper::mapRequestToDto);
+    }
+
     private UserDto getUserById(long userId) {
         return userClient.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
     }
@@ -166,6 +179,14 @@ public class RequestServiceImpl implements RequestService {
 
         if (event.participantLimit() != 0 && requestRepository.countByEventAndStatus(event.id(), RequestStatus.CONFIRMED) >= event.participantLimit()) {
             throw new AllreadyExistsException("Достигнут лимит запросов на участие " + event.id());
+        }
+    }
+
+    private void sendUserAction(Long userId, Long eventId, ActionTypeProto actionType) {
+        try {
+            collectorClient.sendUserAction(userId, eventId, actionType);
+        } catch (Exception e) {
+            log.warn("Failed to save statistics for userId={}, eventId={}", userId, eventId, e);
         }
     }
 }

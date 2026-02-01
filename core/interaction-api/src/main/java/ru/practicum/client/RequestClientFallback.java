@@ -8,6 +8,7 @@ import ru.practicum.dto.request.RequestStatusUpdateParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class RequestClientFallback implements RequestClient {
@@ -29,5 +30,10 @@ public class RequestClientFallback implements RequestClient {
     @Override
     public Map<Long, Long> getConfirmedRequestsByEvents(List<Long> eventIds) {
         return Map.of();
+    }
+
+    @Override
+    public Optional<ParticipationRequestDto> getRequestByEventAndUser(Long eventId, Long userId) {
+        return Optional.empty();
     }
 }

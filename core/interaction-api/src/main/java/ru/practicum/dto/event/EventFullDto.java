@@ -52,7 +52,7 @@ public record EventFullDto(
         @NotBlank
         String title,
 
-        Long views
+        Double rating
 ) {
     @Builder(toBuilder = true)
     public EventFullDto {

@@ -71,14 +71,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidationException(final StatsServerUnavailable e) {
-        log.warn("400 {}", e.getMessage(), e);
-
-        return new ApiError("BAD_REQUEST", "Не найден сервис статистики", e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleValidationException(final AlreadyExistsException e) {
         log.warn("400 {}", e.getMessage(), e);
