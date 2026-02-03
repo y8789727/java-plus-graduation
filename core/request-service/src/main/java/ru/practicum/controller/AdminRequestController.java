@@ -18,6 +18,7 @@ import ru.practicum.service.RequestService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/requests")
@@ -44,5 +45,10 @@ public class AdminRequestController {
     @GetMapping("/countConfirmed")
     @ResponseBody Map<Long, Long> getConfirmedRequestsByEvents(@RequestBody List<Long> eventIds) {
         return requestService.getConfirmedRequestsByEvents(eventIds);
+    }
+
+    @GetMapping("/{eventId}/{userId}")
+    Optional<ParticipationRequestDto> getRequestByEventAndUser(@PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
+        return requestService.getRequestByEventAndUser(userId, eventId);
     }
 }

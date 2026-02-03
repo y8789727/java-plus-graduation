@@ -20,7 +20,7 @@ public interface EventMapper {
     @Mapping(target = "state", source = "state")
     @Mapping(target = "publishedOn", ignore = true)
     @Mapping(target = "createdOn", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     @Mapping(target = "confirmedRequests", ignore = true)
     Event toEntity(NewEventDto dto, Long initiatorId, Category category, State state);
 
